@@ -1,0 +1,92 @@
+# XcodeGen spec.
+#
+# The `.xcodeproj` is generated, not committed. Hand-writing a `project.pbxproj` means maintaining
+# a few thousand lines of UUID-keyed plist by hand, and this repository has no Mac to open it on —
+# so a file that cannot be validated would be a file that is probably wrong. This spec is readable
+# YAML that XcodeGen turns into a correct project.
+#
+#   brew install xcodegen
+#   cd ios && xcodegen generate
+#
+# Two targets: the app, and a share extension. The extension exists because iOS has no
+# `ACTION_SEND` equivalent — another app can only hand content over through the system share
+# sheet, and only a Share Extension appears there. The two targets talk through an App Group
+# container rather than a shared database, because the extension is a separate process with its
+# own sandbox.
+
+name: PhotoLog
+options:
+  bundleIdPrefix: io.photolog
+  deploymentTarget:
+    iOS: '17.0'
+  createIntermediateGroups: true
+
+settings:
+  base:
+    SWIFT_VERSION: '5.9'
+    MARKETING_VERSION: '0.0.1'
+    CURRENT_PROJECT_VERSION: '1'
+    CODE_SIGN_STYLE: Automatic
+
+packages:
+  PhotoLogKit:
+    path: PhotoLogKit
+
+targets:
+  PhotoLog:
+    type: application
+    platform: iOS
+    sources:
+      - path: PhotoLog
+    dependencies:
+      - package: PhotoLogKit
+        product: PhotoLogKit
+    info:
+      path: PhotoLog/Info.plist
+      properties:
+        CFBundleDisplayName: 图志
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        UILaunchScreen: {}
+        NSCameraUsageDescription: 用于拍摄要存入图库的照片
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+    entitlements:
+      path: PhotoLog/PhotoLog.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.io.photolog
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: io.photolog.app
+        TARGETED_DEVICE_FAMILY: '1,2'
+
+  PhotoLogShare:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: PhotoLogShare
+    info:
+      path: PhotoLogShare/Info.plist
+      properties:
+        CFBundleDisplayName: 图志
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.share-services
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ShareViewController
+          NSExtensionAttributes:
+            # Only the image family, matching the `utd` declaration on the HarmonyOS build and the
+            # `image/*` intent filter on the Android one.
+            NSExtensionActivationRule:
+              NSExtensionActivationSupportsImageWithMaxCount: 20
+    entitlements:
+      path: PhotoLogShare/PhotoLogShare.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.io.photolog
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: io.photolog.app.share

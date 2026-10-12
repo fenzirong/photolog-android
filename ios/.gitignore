@@ -1,0 +1,37 @@
+# --------------------------------------------------------------------------- #
+# Generated project
+# --------------------------------------------------------------------------- #
+# `project.yml` is the source of truth; the `.xcodeproj` is a build artifact of
+# `xcodegen generate`. Committing it would mean two things claiming to describe
+# the same project, and the one a human edits by accident is the wrong one.
+PhotoLog.xcodeproj/
+*.xcodeproj/
+
+# --------------------------------------------------------------------------- #
+# Build outputs
+# --------------------------------------------------------------------------- #
+DerivedData/
+build/
+.build/
+*.ipa
+*.dSYM.zip
+
+# --------------------------------------------------------------------------- #
+# Swift Package Manager
+# --------------------------------------------------------------------------- #
+# `Package.resolved` is deliberately NOT ignored: it pins the exact revisions a
+# build used, which is what makes someone else's build reproducible.
+.swiftpm/
+
+# --------------------------------------------------------------------------- #
+# Xcode user state
+# --------------------------------------------------------------------------- #
+xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+*.xccheckout
+
+# --------------------------------------------------------------------------- #
+# macOS
+# --------------------------------------------------------------------------- #
+.DS_Store

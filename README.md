@@ -8,22 +8,36 @@
 
 ---
 
-## 两个平台
+## 三个平台
 
 | 平台 | 目录 | 状态 |
 |---|---|---|
 | Android（7.0+） | 仓库根目录 | 完整闭环：编译、签名、30 项单测、CI 发布、产物独立校验 |
-| **HarmonyOS NEXT（纯血鸿蒙，API 12）** | [`harmonyos/`](harmonyos/README.md) | **源码交付。未编译、未在真机验证**——原因见 [harmonyos/README.md](harmonyos/README.md) |
+| **HarmonyOS NEXT（纯血鸿蒙，API 12）** | [`harmonyos/`](harmonyos/README.md) | 源码交付。**未编译、未在真机验证**——原因见 [harmonyos/README.md](harmonyos/README.md) |
+| **iOS（17+）** | [`ios/`](ios/README.md) | 核心逻辑**已由 macOS CI 真编译真跑**（27 项 XCTest，CI 绿）；**app 层未编译**——原因见 [ios/README.md](ios/README.md) |
 
-鸿蒙版是另一套技术栈（ArkTS + ArkUI + RDB + CameraKit，构建用 hvigor），不是 Android 版的换壳。两版的**导出命名规则、说明文档格式、ZIP 条目命名与中文处理逐条对齐**，同一批照片在两端导出的结果应当一致。
+三个版本是三套技术栈，不是互相换壳：
 
-鸿蒙版唯一能在这台机器上真跑验证的是导出逻辑（纯 TypeScript，不依赖鸿蒙 API）：
+| | Android | HarmonyOS NEXT | iOS |
+|---|---|---|---|
+| 语言 / UI | Kotlin + Compose | ArkTS + ArkUI | Swift + SwiftUI |
+| 构建 | Gradle | hvigor | Xcode |
+| 数据库 | Room | RDB | SwiftData |
+| 拍照 | CameraX | CameraKit | AVFoundation |
+| 接收分享 | `ACTION_SEND` intent filter | `ohos.want.action.sendData` + `utd` | Share Extension + App Group |
+| 导出落盘 | Storage Access Framework | `DocumentViewPicker` | `.fileExporter` |
+
+三版的**导出命名规则、说明文档格式、ZIP 条目命名与中文处理逐条对齐**，同一批照片在任一端导出的结果应当一致。
+
+两个非 Android 平台各有一份能在这台机器上真跑的验证：
 
 ```bash
-node harmonyos/tools/verify-export.mjs   # 67 passed, 0 failed
+node harmonyos/tools/verify-export.mjs   # 67 passed, 0 failed（跑的是 .ets 源码本身）
+cd ios/PhotoLogKit && swift test         # 27 项 XCTest（需 macOS，或由 CI 执行）
 ```
 
-它跑的是 `harmonyos/entry/src/main/ets/export/` 下的 `.ets` 源码本身，并用 **Windows 自带的 `Expand-Archive`** 做真实解压往返，确认中文条目名 `images/001_清晨的雾.jpg` 原样还原。
+两者都跑平台源码本身而非另写的副本，都用**系统自带的解压器**做真实往返验证中文条目名
+（Windows `Expand-Archive` / macOS `ditto`）。
 
 ---
 
