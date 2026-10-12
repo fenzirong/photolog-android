@@ -312,9 +312,9 @@ public enum CaptionDocument {
 
     public static func build(plan: [ExportEntry], options: ExportOptions, exportedAt: Date) -> String {
         switch options.captionFormat {
-        case .markdown: return markdown(plan, options: options, exportedAt: exportedAt)
-        case .html: return html(plan, options: options, exportedAt: exportedAt)
-        case .text: return text(plan, options: options, exportedAt: exportedAt)
+        case .markdown: return markdown(plan: plan, options: options, exportedAt: exportedAt)
+        case .html: return html(plan: plan, options: options, exportedAt: exportedAt)
+        case .text: return text(plan: plan, options: options, exportedAt: exportedAt)
         }
     }
 
