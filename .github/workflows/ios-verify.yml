@@ -1,0 +1,37 @@
+name: iOS verify
+
+# The iOS app itself needs a Mac with Xcode and a signing identity, so it cannot be built on a
+# generic runner. Its platform-independent half — `PhotoLogKit`, which owns the export ordering,
+# the file naming and the ZIP writer — can be, and that is the part whose correctness is not
+# visible by looking at a screen. So this workflow verifies exactly that, on a macOS runner, with
+# no simulator and no signing.
+#
+# `swift test` also exercises `ZipWriter` against `/usr/bin/unzip`, the system extractor, which
+# checks the stored CRC and the UTF-8 name flag for real rather than by inspection.
+
+on:
+  push:
+    paths:
+      - 'ios/**'
+      - '.github/workflows/ios-verify.yml'
+  pull_request:
+    paths:
+      - 'ios/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Swift version
+        run: swift --version
+
+      - name: Test PhotoLogKit
+        working-directory: ios/PhotoLogKit
+        run: swift test --parallel
