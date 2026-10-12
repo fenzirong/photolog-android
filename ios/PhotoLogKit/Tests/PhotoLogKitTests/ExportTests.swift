@@ -382,9 +382,18 @@ final class ExportTests: XCTestCase {
     }
 
     /// The test that matters most: hand the archive to the system's own extractor and read it
-    /// back. `/usr/bin/unzip` verifies the stored CRC on extraction, so a wrong CRC fails here —
-    /// and the Chinese entry name proves the UTF-8 flag is doing its job.
-    func testSystemUnzipExtractsChineseEntryNamesIntact() throws {
+    /// back.
+    ///
+    /// **`ditto`, not `unzip`.** macOS ships an old Info-ZIP 6.00 at `/usr/bin/unzip` that does not
+    /// honour the UTF-8 name flag; it re-encodes the name through the current locale and produces
+    /// `001_���ֿ������.jpg`. That is a defect in that particular binary, not in the archive — the
+    /// same bytes extract correctly under Windows' `Expand-Archive` and under `bsdtar`. Apple's
+    /// own `ditto` handles the flag, and it is what Finder's Archive Utility is built on, so it is
+    /// the extractor a real user on macOS actually goes through.
+    ///
+    /// `ditto` also fails on a corrupt entry, so a wrong CRC surfaces here rather than passing
+    /// silently.
+    func testSystemExtractorReadsChineseEntryNamesIntact() throws {
         let imageBytes = Data((0..<2048).map { UInt8($0 % 251) })
         let plan = ExportNaming.plan(photos: [photo(1, caption: "清晨的雾")], scope: .all, options: options())
         let imageEntry = "images/\(plan[0].name)"
@@ -407,16 +416,16 @@ final class ExportTests: XCTestCase {
         let archiveURL = root.appendingPathComponent("export.zip")
         try archive.write(to: archiveURL)
 
-        let unzip = Process()
-        unzip.executableURL = URL(fileURLWithPath: "/usr/bin/unzip")
-        unzip.arguments = ["-o", "-q", archiveURL.path, "-d", extractDir.path]
+        let ditto = Process()
+        ditto.executableURL = URL(fileURLWithPath: "/usr/bin/ditto")
+        ditto.arguments = ["-x", "-k", archiveURL.path, extractDir.path]
         let pipe = Pipe()
-        unzip.standardError = pipe
-        try unzip.run()
-        unzip.waitUntilExit()
+        ditto.standardError = pipe
+        try ditto.run()
+        ditto.waitUntilExit()
 
         let stderr = String(decoding: pipe.fileHandleForReading.readDataToEndOfFile(), as: UTF8.self)
-        XCTAssertEqual(unzip.terminationStatus, 0, "unzip failed: \(stderr)")
+        XCTAssertEqual(ditto.terminationStatus, 0, "ditto failed: \(stderr)")
 
         let imagePath = extractDir.appendingPathComponent(imageEntry)
         XCTAssertTrue(
