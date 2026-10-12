@@ -1,0 +1,20 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "图志 PhotoLog"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "照片日志：拍照存档、图下文字说明、无损导出"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "图志"
+    },
+    {
+      "name": "camera_reason",
+      "value": "用于拍摄要存入图库的照片"
+    }
+  ]
+}

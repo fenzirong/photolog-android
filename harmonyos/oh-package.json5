@@ -1,0 +1,10 @@
+{
+  "modelVersion": "5.0.0",
+  "name": "photolog-harmony",
+  "version": "0.0.1",
+  "description": "图志 PhotoLog —— 把「照片 + 它下面那一行文字」当成一个整体来管理的 HarmonyOS 应用",
+  "main": "",
+  "author": "fenzirong",
+  "license": "MIT",
+  "dependencies": {}
+}

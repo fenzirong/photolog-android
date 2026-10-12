@@ -8,6 +8,25 @@
 
 ---
 
+## 两个平台
+
+| 平台 | 目录 | 状态 |
+|---|---|---|
+| Android（7.0+） | 仓库根目录 | 完整闭环：编译、签名、30 项单测、CI 发布、产物独立校验 |
+| **HarmonyOS NEXT（纯血鸿蒙，API 12）** | [`harmonyos/`](harmonyos/README.md) | **源码交付。未编译、未在真机验证**——原因见 [harmonyos/README.md](harmonyos/README.md) |
+
+鸿蒙版是另一套技术栈（ArkTS + ArkUI + RDB + CameraKit，构建用 hvigor），不是 Android 版的换壳。两版的**导出命名规则、说明文档格式、ZIP 条目命名与中文处理逐条对齐**，同一批照片在两端导出的结果应当一致。
+
+鸿蒙版唯一能在这台机器上真跑验证的是导出逻辑（纯 TypeScript，不依赖鸿蒙 API）：
+
+```bash
+node harmonyos/tools/verify-export.mjs   # 67 passed, 0 failed
+```
+
+它跑的是 `harmonyos/entry/src/main/ets/export/` 下的 `.ets` 源码本身，并用 **Windows 自带的 `Expand-Archive`** 做真实解压往返，确认中文条目名 `images/001_清晨的雾.jpg` 原样还原。
+
+---
+
 ## 一、需求对照
 
 | 需求 | 实现位置 | 说明 |

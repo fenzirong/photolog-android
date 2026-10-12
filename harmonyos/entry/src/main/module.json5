@@ -1,0 +1,77 @@
+{
+  "module": {
+    "name": "entry",
+    "type": "entry",
+    "description": "$string:module_desc",
+    "mainElement": "EntryAbility",
+    "deviceTypes": [
+      "phone",
+      "tablet",
+      "2in1"
+    ],
+    "deliveryWithInstall": true,
+    "installationFree": false,
+    "pages": "$profile:main_pages",
+    "abilities": [
+      {
+        "name": "EntryAbility",
+        "srcEntry": "./ets/entryability/EntryAbility.ets",
+        "description": "$string:EntryAbility_desc",
+        "icon": "$media:startIcon",
+        "label": "$string:EntryAbility_label",
+        "startWindowIcon": "$media:startIcon",
+        "startWindowBackground": "$color:start_window_background",
+        "exported": true,
+        /*
+         * Two skills, and the second one is the whole reason this app exists on HarmonyOS.
+         *
+         * The first is the ordinary launcher entry. The second is what puts 图志 into the
+         * system share sheet: `ohos.want.action.sendData` is the action the share panel
+         * dispatches, and `utd` (Uniform Type Descriptor) is how a target declares which
+         * *kinds* of content it accepts — `general.image` covers the image family.
+         * `maxFileSupported` is the batch size the panel will hand over at once.
+         *
+         * A missing or wrong `utd` produces no error; the app simply never appears in the
+         * share sheet, which is a silent failure and hard to attribute afterwards.
+         *
+         * Share Kit authorises the transfer through the system panel itself, so receiving a
+         * shared image needs no permission of its own.
+         */
+        "skills": [
+          {
+            "actions": [
+              "action.system.home"
+            ],
+            "entities": [
+              "entity.system.home"
+            ]
+          },
+          {
+            "actions": [
+              "ohos.want.action.sendData"
+            ],
+            "uris": [
+              {
+                "scheme": "file",
+                "utd": "general.image",
+                "maxFileSupported": 9
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "requestPermissions": [
+      {
+        "name": "ohos.permission.CAMERA",
+        "reason": "$string:camera_reason",
+        "usedScene": {
+          "abilities": [
+            "EntryAbility"
+          ],
+          "when": "inuse"
+        }
+      }
+    ]
+  }
+}

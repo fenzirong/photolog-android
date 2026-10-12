@@ -1,0 +1,32 @@
+# --------------------------------------------------------------------------- #
+# Build outputs and tool state
+# --------------------------------------------------------------------------- #
+# hvigor writes build/, ohpm writes oh_modules/ and .ohpm/, and the linter keeps a
+# cache. None of it belongs in the repository.
+build/
+**/build/
+oh_modules/
+oh-package-lock.json5
+.ohpm/
+.hvigor/
+.cxx/
+.clangd
+.clang-format
+.clang-tidy
+local.properties
+
+# --------------------------------------------------------------------------- #
+# IDE
+# --------------------------------------------------------------------------- #
+.idea/
+*.iml
+.DS_Store
+/preview/
+
+# --------------------------------------------------------------------------- #
+# Verification scratch
+# --------------------------------------------------------------------------- #
+# `tools/verify-export.mjs` copies the export sources here as `.ts` to run them
+# under Node, then deletes the directory. It is listed anyway so an interrupted
+# run cannot leave stray files staged.
+.verify/

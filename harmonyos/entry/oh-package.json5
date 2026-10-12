@@ -1,0 +1,9 @@
+{
+  "name": "entry",
+  "version": "0.0.1",
+  "description": "图志 PhotoLog entry module",
+  "main": "",
+  "author": "fenzirong",
+  "license": "MIT",
+  "dependencies": {}
+}
