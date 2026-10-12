@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Same style name, dark parent: this is what makes the platform day/night switch work
+         without a DayNight parent style, which does not exist on the platform. -->
+    <style name="Theme.PhotoLog" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">#111318</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+</resources>

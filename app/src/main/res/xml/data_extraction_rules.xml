@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Auto-backup rules for API 31+. Same reasoning as res/xml/backup_rules.xml: the stored
+  originals and the database that indexes them are excluded together, because backing up one
+  without the other restores a library whose captions point at missing photos.
+-->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="database" path="photolog.db" />
+        <exclude domain="database" path="photolog.db-shm" />
+        <exclude domain="database" path="photolog.db-wal" />
+        <exclude domain="file" path="originals" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="database" path="photolog.db" />
+        <exclude domain="file" path="originals" />
+    </device-transfer>
+</data-extraction-rules>

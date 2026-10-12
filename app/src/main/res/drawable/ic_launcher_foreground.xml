@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Launcher icon foreground: a photo frame with a caption line under it.
+
+  A vector rather than a set of PNGs: one file instead of five density buckets, crisp at any
+  size, and no binary assets to keep in sync.
+
+  The 108dp viewport with the artwork inside roughly 72dp is the adaptive-icon contract —
+  anything outside that safe zone can be cropped by the launcher's mask, which is why every
+  path stays between y=26 and y=85.
+
+  The two short strokes below the frame are the point of the app: every photo carries its own
+  line of text.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- The frame. -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:pathData="M34,26 h40 a4,4 0 0 1 4,4 v32 a4,4 0 0 1 -4,4 h-40 a4,4 0 0 1 -4,-4 v-32 a4,4 0 0 1 4,-4 z" />
+
+    <!-- The sun. -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M39,37 a4,4 0 1 0 8,0 a4,4 0 1 0 -8,0 z" />
+
+    <!-- The ridge line inside the frame. -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="4.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M36,60 L47,47 L57,58 L63,52 L72,60" />
+
+    <!-- Two caption lines: one full width, one shorter, the way a wrapped sentence ends. -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="4.5"
+        android:strokeLineCap="round"
+        android:pathData="M36,76 h36" />
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="4.5"
+        android:strokeLineCap="round"
+        android:pathData="M36,85 h22" />
+</vector>

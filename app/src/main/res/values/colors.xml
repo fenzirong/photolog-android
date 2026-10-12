@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Adaptive-icon background layer and the splash background. Matches the light theme's primary. -->
+    <color name="ic_launcher_background">#1D4E89</color>
+    <color name="splash_background">#F8F9FC</color>
+</resources>

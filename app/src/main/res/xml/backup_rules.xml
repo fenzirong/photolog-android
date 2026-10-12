@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Auto-backup rules for API 30 and below.
+
+  Both the database and the stored originals are excluded. This is the opposite call from a
+  cache-backed reading app: here the files ARE the user's data, and the database is the index
+  into them. Backing up the index without the files — or the files without the index — would
+  restore a library whose captions point at photos that are not there.
+
+  A user who wants a portable copy has an explicit path for it: 导出 → 打包为 ZIP, which
+  writes a self-contained archive they can keep.
+-->
+<full-backup-content>
+    <exclude domain="database" path="photolog.db" />
+    <exclude domain="database" path="photolog.db-shm" />
+    <exclude domain="database" path="photolog.db-wal" />
+    <exclude domain="file" path="originals" />
+</full-backup-content>

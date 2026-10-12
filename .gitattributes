@@ -1,0 +1,19 @@
+# Line-ending policy.
+#
+# This matters more than usual here: the release workflow runs `./gradlew` on a Linux runner.
+# A `gradlew` that arrives with CRLF line endings fails there with `bad interpreter: No such
+# file or directory` — a confusing error that points at the interpreter rather than at the
+# line endings that caused it.
+#
+# So text is normalised to LF in the repository, and only the Windows batch files keep CRLF.
+* text=auto eol=lf
+
+*.bat text eol=crlf
+gradlew text eol=lf
+
+# The Gradle wrapper jar is binary; without this git would try to normalise it and corrupt it.
+*.jar binary
+*.jks binary
+*.png binary
+*.jpg binary
+*.webp binary

@@ -1,0 +1,44 @@
+# --------------------------------------------------------------------------- #
+# Build outputs
+# --------------------------------------------------------------------------- #
+# Without these rules a `git add -A` picks up the Gradle caches, the KSP-generated
+# sources and a 20 MB APK that one command regenerates. Only the sources belong in
+# the repository.
+build/
+.gradle/
+.kotlin/
+*.apk
+*.aab
+*.ap_
+*.dex
+local.properties
+
+# --------------------------------------------------------------------------- #
+# IDE
+# --------------------------------------------------------------------------- #
+.idea/
+*.iml
+.DS_Store
+captures/
+.externalNativeBuild/
+.cxx/
+
+# --------------------------------------------------------------------------- #
+# Signing material
+# --------------------------------------------------------------------------- #
+# The keystore and its properties file live one level UP, outside this directory,
+# so they cannot be committed even by accident — these rules are the second line of
+# defence, not the first. `app/build.gradle.kts` reads
+# `../photolog-keystore.properties` and falls back to an unsigned release build when
+# it is absent, so a contributor without the secret can still build.
+photolog-keystore.properties
+keystore.properties
+*.jks
+*.keystore
+
+# --------------------------------------------------------------------------- #
+# Deliberately NOT ignored
+# --------------------------------------------------------------------------- #
+# `app/schemas/` holds the exported Room schema. It is generated, but committing it
+# is what makes a schema change visible in review instead of only in a runtime crash
+# on someone else's device.

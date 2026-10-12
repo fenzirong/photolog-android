@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      The Activity theme only has to remove the action bar (Compose draws its own top bar)
+      and set a window background that matches the UI, so the first frame does not flash.
+
+      `android:Theme.Material.DayNight.NoActionBar` does NOT exist as a platform style —
+      AAPT rejects it with "resource ... not found". Day/night is done the dependency-free
+      way instead, with a `values-night` override of the same style name.
+    -->
+    <style name="Theme.PhotoLog" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/splash_background</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+
+    <!--
+      Shown for the few hundred milliseconds before the first Compose frame.
+      `postSplashScreenTheme` must point at the theme the Activity keeps afterwards, otherwise
+      the window ends up with no background once the splash is dismissed.
+    -->
+    <style name="Theme.PhotoLog.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/splash_background</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/Theme.PhotoLog</item>
+    </style>
+</resources>

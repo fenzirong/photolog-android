@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Two permissions, both justified by a visible feature:
+
+  - CAMERA: the in-app capture screen drives CameraX directly.
+
+  Notably absent: every storage permission. Import goes through the system photo picker
+  (`PickVisualMedia`) and incoming shares arrive with a per-URI read grant, so the app never
+  needs to be handed the user's whole gallery. Export goes through the Storage Access
+  Framework, which is a user-picked grant rather than a permission.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- The app is useful without a camera (import and share still work), so the hardware is
+         optional: `required="true"` would hide it from tablets and ChromeOS devices. -->
+    <uses-feature
+        android:name="android.hardware.camera.any"
+        android:required="false" />
+
+    <application
+        android:name=".PhotoLogApplication"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.PhotoLog.Splash">
+
+        <!--
+          `largeHeap` is on because a single export can decode a 100 MP image into an ARGB
+          bitmap to re-encode it; the default heap on a mid-range device is not enough for
+          that, and an OutOfMemoryError there loses the whole export rather than one photo.
+
+          `launchMode="singleTop"` keeps a second share from stacking a second copy of the
+          app: the running instance receives it through `onNewIntent` instead.
+        -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.PhotoLog.Splash"
+            android:windowSoftInputMode="adjustResize">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!-- Single image shared from another app ("分享到…"). -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
+
+            <!-- Multiple images shared at once. -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
+
+            <!-- "Open with" from a file manager or gallery. -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
