@@ -24,11 +24,26 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-
+      # `android-actions/setup-android` is deliberately NOT used here.
+      #
+      # It runs `sdkmanager tools` as part of its own setup, and Google removed the standalone
+      # `tools` package. Newer cmdline-tools (16.0 on the current runner image) answer
+      # "Warning: Failed to find package 'tools'" and exit 1, which the action treats as fatal —
+      # the job dies in setup and never reaches the build. The runner image already ships the
+      # SDK, so the action was only ever saving two lines.
+      #
+      # The path is resolved rather than assumed: cmdline-tools has lived under both `latest`
+      # and a version number, and a hardcoded `latest` is a build that breaks on someone else's
+      # runner image.
       - name: Install SDK packages
-        run: sdkmanager "platforms;android-35" "build-tools;35.0.0" "platform-tools"
+        run: |
+          SDK="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-/usr/local/lib/android/sdk}}"
+          echo "ANDROID_SDK_ROOT=$SDK" >> "$GITHUB_ENV"
+          echo "ANDROID_HOME=$SDK" >> "$GITHUB_ENV"
+          CMDLINE=$(find "$SDK/cmdline-tools" -maxdepth 2 -name sdkmanager -type f | head -1)
+          echo "sdkmanager: $CMDLINE"
+          yes | "$CMDLINE" --licenses > /dev/null 2>&1 || true
+          "$CMDLINE" "platforms;android-35" "build-tools;35.0.0" "platform-tools"
 
       # Keyed on the build scripts rather than on the source: a source change recompiles but
       # reuses every downloaded dependency, which is the part that actually costs minutes.
