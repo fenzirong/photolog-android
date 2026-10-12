@@ -159,7 +159,7 @@ Release 签名从项目目录之外读取 `../photolog-keystore.properties`（�
 | Release APK 体积 | 2.61 MB（debug 版约 20 MB，未压缩未混淆） |
 | 权限 | 仅 `android.permission.CAMERA`（另有无害的 `DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION`，由 androidx 自动声明） |
 | 分享入口 | 合并后清单确认 `SEND` / `SEND_MULTIPLE` / `VIEW` 三个 filter 均带 `image/*` |
-| 清单 | `package=io.photolog.android`、`minSdk 24`、`targetSdk 35`、`versionName 1.0.0`、`MainActivity` 为 `singleTop` |
+| 清单 | `package=io.photolog.android`、`minSdk 24`、`targetSdk 35`、`versionName 0.0.1`、`MainActivity` 为 `singleTop` |
 
 单元测试覆盖的契约：
 

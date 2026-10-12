@@ -79,7 +79,7 @@ android {
         minSdk = 24
         targetSdk = 35
         versionCode = 1
-        versionName = "1.0.0"
+        versionName = "0.0.1"
     }
 
     buildTypes {
@@ -107,6 +107,12 @@ android {
 
     buildFeatures {
         compose = true
+
+        // `BuildConfig.VERSION_NAME` is what 设置 → 关于 shows. AGP 8 stopped generating
+        // BuildConfig by default, and without this flag the version would have to be typed a
+        // second time into the UI — which is exactly how a screen ends up claiming a version
+        // the installed APK is not.
+        buildConfig = true
     }
 
     packaging {

@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import io.photolog.android.BuildConfig
 import io.photolog.android.data.AppSettings
 import io.photolog.android.export.CaptionFormat
 import io.photolog.android.vm.SettingsViewModel
@@ -206,7 +207,7 @@ fun SettingsScreen(
                     "需要长期留存请用「导出 → 打包为 ZIP」。",
             )
             Text(
-                text = "版本 1.0.0",
+                text = "版本 ${BuildConfig.VERSION_NAME}",
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
